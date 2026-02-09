@@ -1,0 +1,664 @@
+:root{
+  --bg1:#120014; --bg2:#2a0026;
+  --pink:#ff3b7a; --rose:#ff7aa8; --vio:#b07cff;
+  --text: rgba(255,255,255,.92);
+  --muted: rgba(255,255,255,.72);
+}
+
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+
+body{
+  margin:0;
+  overflow:hidden;
+  color:var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans";
+  background:
+    radial-gradient(1100px 700px at 12% 7%, rgba(255,59,122,.22), transparent 55%),
+    radial-gradient(900px 650px at 92% 8%, rgba(176,124,255,.14), transparent 55%),
+    radial-gradient(1200px 900px at 60% 100%, rgba(255,122,168,.15), transparent 60%),
+    linear-gradient(180deg, var(--bg1), var(--bg2));
+}
+
+#hearts, #sparkles{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+}
+#hearts{ z-index:0; }
+#sparkles{ z-index:2; }
+
+.stage{
+  position:fixed;
+  inset:0;
+  display:grid;
+  place-items:center;
+  padding: clamp(14px, 2.2vw, 22px);
+  z-index:3;
+}
+
+.intro{
+  width:min(920px, 95vw);
+  text-align:center;
+  user-select:none;
+}
+
+.tag{
+  display:inline-block;
+  padding:8px 12px;
+  border-radius:999px;
+  background: rgba(0,0,0,.22);
+  border:1px solid rgba(255,255,255,.14);
+  color: rgba(255,255,255,.88);
+  font-weight:900;
+}
+
+.title{
+  margin:14px 0 10px;
+  font-size: clamp(34px, 5vw, 76px);
+  line-height:1.02;
+  filter: drop-shadow(0 18px 40px rgba(0,0,0,.35));
+}
+.grad{
+  background: linear-gradient(90deg, var(--pink), var(--rose), var(--vio));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  font-weight:1000;
+}
+
+.sub{
+  margin: 0 auto;
+  max-width: 64ch;
+  color: var(--muted);
+  font-size: clamp(1rem, 1.4vw, 1.08rem);
+}
+
+.actions{
+  margin-top: 16px;
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+.btn{
+  border:0;
+  cursor:pointer;
+  padding: 11px 13px;
+  border-radius: 14px;
+  font-weight:1000;
+  background: linear-gradient(90deg, var(--pink), var(--rose));
+  color:#160012;
+  box-shadow: 0 12px 30px rgba(255,59,122,.20);
+  font-family: "Noto Sans", Inter, sans-serif;
+}
+.btn:hover{ transform: translateY(-1px); }
+.btn:active{ transform: translateY(0); }
+.btn.ghost{
+  background: rgba(248, 9, 9, 0.722);
+  color: var(--text);
+  border:1px solid rgba(255,255,255,.14);
+  box-shadow:none;
+  font-family: "Noto Sans", Inter, sans-serif;
+}
+
+.muted{ color: var(--muted); }
+.kbd{
+  padding:2px 8px;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:10px;
+  background: rgba(0,0,0,.22);
+}
+
+/* Reveal */
+.reveal{
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  opacity:0;
+  transform: scale(.995);
+  transition: opacity .7s ease, transform .7s ease;
+  pointer-events:none;
+}
+.reveal.on{
+  opacity:1;
+  transform: scale(1);
+  pointer-events:auto;
+}
+
+/* Pop text */
+#burstText span{
+  display:inline-block;
+  transform: translateY(12px) scale(.96);
+  opacity:0;
+  animation: pop .7s cubic-bezier(.2,.9,.2,1) forwards;
+}
+@keyframes pop{ to{ transform: translateY(0) scale(1); opacity:1; } }
+
+/* ===== Box base + FX ===== */
+.glass{
+  position: relative;
+  overflow: hidden;
+  transform: translateZ(0);
+}
+
+/* animated gradient border */
+.glass::before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  border-radius: 28px;
+  background: conic-gradient(
+    from 0deg,
+    rgba(255,59,122,0),
+    rgba(255,59,122,.55),
+    rgba(176,124,255,.55),
+    rgba(255,122,168,.55),
+    rgba(255,59,122,0)
+  );
+  filter: blur(16px);
+  opacity: .20;
+  animation: spin 6s linear infinite;
+  z-index: 0;
+}
+.glass::after{
+  content:"";
+  position:absolute;
+  inset: 1px;
+  border-radius: 27px;
+  background: linear-gradient(180deg, rgba(10,0,14,.92), rgba(10,0,14,.72));
+  border:1px solid rgba(255,255,255,.14);
+  backdrop-filter: blur(10px);
+  z-index: 0;
+}
+
+.glass .shine{
+  position:absolute;
+  inset:-40%;
+  background: linear-gradient(
+    110deg,
+    transparent 35%,
+    rgba(255,255,255,.10) 45%,
+    rgba(255,255,255,.20) 50%,
+    rgba(255,255,255,.10) 55%,
+    transparent 65%
+  );
+  transform: translateX(-30%) rotate(8deg);
+  animation: shine 4.8s ease-in-out infinite;
+  z-index: 1;
+  pointer-events:none;
+  opacity: .20;
+}
+
+.glass .blob{
+  position:absolute;
+  width: 440px;
+  height: 440px;
+  border-radius: 50%;
+  left: -170px;
+  top: -200px;
+  background: radial-gradient(circle at 30% 30%,
+    rgba(255,59,122,.28),
+    rgba(176,124,255,.18),
+    transparent 60%
+  );
+  filter: blur(6px);
+  animation: blob 7s ease-in-out infinite;
+  z-index: 1;
+  pointer-events:none;
+  opacity: .85;
+}
+
+.glass .contentOverlay{
+  position:absolute;
+  inset:0;
+  z-index: 1;
+  pointer-events:none;
+}
+
+@keyframes spin{ to{ transform: rotate(360deg); } }
+@keyframes shine{
+  0%,100%{ transform: translateX(-35%) rotate(10deg); opacity:.12; }
+  50%{ transform: translateX(35%) rotate(10deg); opacity:.28; }
+}
+@keyframes blob{
+  0%,100%{ transform: translate(0,0) scale(1); }
+  50%{ transform: translate(70px, 45px) scale(1.10); }
+}
+
+/* ===== Pastel pink box theme ===== */
+.glass--pro{
+  width: min(920px, 94vw);
+  padding: clamp(16px, 2.4vw, 24px) clamp(14px, 2.2vw, 22px);
+  border-radius: clamp(20px, 3.2vw, 28px);
+  background: rgba(255, 214, 232, .80);
+  box-shadow: 0 26px 95px rgba(0,0,0,.30);
+}
+.glass--pro::after{
+  border-radius: calc(clamp(20px, 3.2vw, 28px) - 1px);
+  background: linear-gradient(180deg,
+    rgba(255, 236, 245, .94),
+    rgba(255, 214, 232, .72)
+  );
+  border: 1px solid rgba(255,255,255,.60);
+}
+.glass--pro .contentOverlay{
+  border-radius: clamp(20px, 3.2vw, 28px);
+  background: radial-gradient(circle at 50% 28%,
+    rgba(255,255,255,.16),
+    rgba(255,255,255,.00) 35%,
+    rgba(0,0,0,.10) 100%
+  );
+}
+
+.boxHead{ display:flex; justify-content:center; margin-bottom: 10px; }
+.pill{
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.40);
+  border: 1px solid rgba(255,255,255,.62);
+  color: rgba(70, 10, 40, .86);
+  font-weight: 950;
+}
+
+.burst{
+    margin: 2px auto 0;
+    font-size: clamp(9px, 4.2vw, 34px);
+    line-height: 1.10;
+    font-weight: 900;
+    color: rgba(70, 10, 40, .92);
+    text-shadow: 0 14px 34px rgba(0,0,0,.18);
+
+    /* FORCE 1 LINE */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: min(92vw, 720px);
+
+    /* bỏ cái này để không bị xuống dòng */
+    overflow-wrap: normal;
+    overflow: visible;      /* không cắt */
+  text-overflow: clip;
+}
+
+
+.line{
+  margin: 10px auto 0;
+  max-width: 68ch;
+  font-size: clamp(.98rem, 1.3vw, 1.08rem);
+  color: rgba(70, 10, 40, .78);
+  text-shadow: 0 12px 30px rgba(0,0,0,.12);
+}
+
+.boxActions{
+  margin-top: 16px;
+  display:flex;
+  gap: 10px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+.boxFoot{
+  margin-top: 12px;
+  text-align:center;
+  color: rgba(70, 10, 40, .72);
+  font-weight: 900;
+  font-size: .95rem;
+}
+
+/* keep content above effects */
+.glass--pro > *{ position:relative; z-index:2; }
+.glass--pro .blob, .glass--pro .shine, .glass--pro .contentOverlay{ z-index:1; }
+
+/* ===== Special heart centered ===== */
+#specialHeart{
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  width: min(420px, 74vw);
+  aspect-ratio: 1 / 1;
+  transform: translate(-50%, -50%) scale(.78);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 6;
+  transition: opacity .25s ease;
+  filter: drop-shadow(0 26px 80px rgba(255,59,122,.22));
+}
+#specialHeart.show{ opacity: 1; }
+
+@keyframes specialIn {
+  0%   { transform: translate(-50%, -50%) scale(.55) rotate(-6deg); }
+  55%  { transform: translate(-50%, -50%) scale(1.05) rotate(3deg); }
+  100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+}
+@keyframes halo {
+  0%,100% { transform: scale(.98); opacity: .55; }
+  50%     { transform: scale(1.06); opacity: .85; }
+}
+@keyframes floaty {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Cursor hearts trail */
+.cursorHeart{
+  position: fixed;
+  left: 0; top: 0;
+  transform: translate(-50%,-50%);
+  pointer-events:none;
+  z-index: 7;
+  font-weight: 1000;
+  opacity: 0;
+  animation: cursorPop .9s ease-out forwards;
+  will-change: transform, opacity;
+  text-shadow: 0 10px 28px rgba(255,59,122,.25);
+}
+@keyframes cursorPop{
+  0%   { opacity:0; transform: translate(-50%,-50%) scale(.7); }
+  15%  { opacity:1; transform: translate(-50%,-50%) scale(1); }
+  100% { opacity:0; transform: translate(-50%,-85px) scale(1.25); }
+}
+
+/* shockwave ring */
+.shockwave{
+  position: fixed;
+  left: 0; top: 0;
+  width: 14px; height: 14px;
+  transform: translate(-50%,-50%);
+  border-radius: 999px;
+  border: 2px solid rgba(255,122,168,.55);
+  box-shadow: 0 0 0 6px rgba(176,124,255,.08);
+  pointer-events:none;
+  z-index: 7;
+  animation: wave .8s ease-out forwards;
+}
+@keyframes wave{
+  0%{ opacity:.0; transform: translate(-50%,-50%) scale(.2); }
+  15%{ opacity:.9; }
+  100%{ opacity:0; transform: translate(-50%,-50%) scale(18); }
+}
+
+/* ===== Cupid PNG character ===== */
+#cupidAnim{
+  position: fixed;
+  inset: 0;
+  pointer-events:none;
+  z-index: 10;
+  opacity: 0;
+}
+#cupidAnim.show{ opacity: 1; }
+
+/* Cupid chạy vào và đứng bắn ở cùng 1 cao độ */
+#cupidAnim .cupidChar{
+  position:absolute;
+  left: -340px;
+  top: 60%;
+  width: min(260px, 56vw);
+  aspect-ratio: 4 / 3;
+  transform: translateY(-50%);
+  will-change: left, top, transform;
+  background: url("assets/cupid.png") center/contain no-repeat;
+  filter: drop-shadow(0 14px 22px rgba(0,0,0,.25));
+  animation: cupidRunX 950ms cubic-bezier(.2,.9,.2,1) forwards;
+}
+
+/* Mũi tên bay NGANG (cùng top với cupid) */
+#cupidAnim .arrowFly{
+  position:absolute;
+  top: 60%;
+  left: 28%;
+  width: min(240px, 34vw);
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(90deg,
+    rgba(255,255,255,0),
+    rgba(255,255,255,.92),
+    rgba(255,59,122,.86)
+  );
+  transform: translateY(-50%) translateX(0) scaleX(0);
+  transform-origin: left center;
+  opacity: 0;
+  filter: drop-shadow(0 10px 18px rgba(255,59,122,.16));
+  will-change: transform, opacity;
+}
+#cupidAnim .arrowFly::after{
+  content:"";
+  position:absolute;
+  right:-10px;
+  top:50%;
+  transform: translateY(-50%);
+  width:0; height:0;
+  border-left: 12px solid rgba(255,59,122,.88);
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+}
+
+#cupidAnim.shoot .arrowFly{
+  opacity: 1;
+  animation: arrowAcross 520ms cubic-bezier(.2,.9,.2,1) 520ms forwards;
+}
+
+@keyframes cupidRunX{
+  0%   { left:-340px; transform: translateY(-50%) scale(.96); }
+  70%  { left: 18%;   transform: translateY(-50%) scale(1.02); }
+  100% { left: 20%;   transform: translateY(-50%) scale(1); }
+}
+
+/* Mũi tên bay ngang qua giữa màn hình */
+@keyframes arrowAcross{
+  0%   { transform: translateY(-50%) translateX(0) scaleX(0); }
+  100% { transform: translateY(-50%) translateX(52vw) scaleX(2.6); }
+}
+
+@media (max-width: 520px){
+  #cupidAnim .cupidChar{ top: 66%; width: min(240px, 70vw); }
+  #cupidAnim .arrowFly{ top: 66%; left: 24%; width: min(200px, 52vw); }
+
+  @keyframes arrowAcross{
+    0%   { transform: translateY(-50%) translateX(0) scaleX(0); }
+    100% { transform: translateY(-50%) translateX(58vw) scaleX(2.35); }
+  }
+}
+
+/* fly to screen center */
+@keyframes arrowToCenter{
+  0%{ transform: translateY(-50%) translateX(0) scaleX(0); }
+  100%{ transform: translateY(-50%) translateX(calc(50vw - 26% - 40px)) scaleX(2.25); }
+}
+
+@media (max-width: 520px){
+  #specialHeart{ width: min(340px, 82vw); }
+  #cupidAnim .cupidChar{ top: 66%; width: min(240px, 70vw); }
+  #cupidAnim .arrowFly{ top: 66%; left: 22%; width: 170px; }
+
+  @keyframes arrowToCenter{
+    0%{ transform: translateY(-50%) translateX(0) scaleX(0); }
+    100%{ transform: translateY(-50%) translateX(calc(50vw - 22% - 34px)) scaleX(2.15); }
+  }
+}
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce){
+  *{ animation:none !important; transition:none !important; }
+}
+/* FX overlay inside the box (hearts explosion on box) */
+.boxFX{
+  position:absolute;
+  inset:0;
+  z-index:4;              /* above content */
+  pointer-events:none;
+  overflow:hidden;
+  border-radius: inherit;
+}
+
+.boxHeart{
+  position:absolute;
+  left:0; top:0;
+  transform: translate(-50%,-50%);
+  font-weight: 1000;
+  opacity:0;
+  text-shadow: 0 10px 22px rgba(0,0,0,.12);
+  animation: boxHeartPop 900ms cubic-bezier(.2,.9,.2,1) forwards;
+}
+
+@keyframes boxHeartPop{
+  0%   { opacity:0; transform: translate(-50%,-50%) scale(.6); filter: blur(.2px); }
+  14%  { opacity:1; transform: translate(-50%,-50%) scale(1); }
+  100% { opacity:0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1.35); }
+}
+/* ===== Center target heart (always in the middle) ===== */
+#centerHeart{
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  width: min(220px, 42vw);
+  aspect-ratio: 1/1;
+  transform: translate(-50%,-50%);
+  z-index: 5;
+  pointer-events:none;
+  filter: drop-shadow(0 26px 70px rgba(255,59,122,.22));
+}
+#centerHeart svg{ width:100%; height:auto; display:block; }
+#centerHeart .pulse{
+  transform-origin: 50% 55%;
+  animation: centerPulse 1.35s ease-in-out infinite;
+}
+@keyframes centerPulse{
+  0%,100%{ transform: scale(1); }
+  50%{ transform: scale(1.05); }
+}
+
+/* ===== Cupid PNG + arrow aligned to center heart ===== */
+#cupidAnim{
+  position: fixed;
+  inset: 0;
+  pointer-events:none;
+  z-index: 10;
+  opacity: 0;
+}
+#cupidAnim.show{ opacity: 1; }
+
+#cupidAnim .cupidChar{
+  position:absolute;
+  left: -360px;
+  top: 50%;
+  width: min(260px, 56vw);
+  aspect-ratio: 4 / 3;
+  transform: translateY(-50%);
+  background: url("assets/cupid.png") center/contain no-repeat;
+  filter: drop-shadow(0 14px 22px rgba(0,0,0,.25));
+  will-change: left, transform, top;
+  animation: cupidRunX 900ms cubic-bezier(.2,.9,.2,1) forwards;
+}
+
+/* Arrow starts near cupid and flies to exact center (50vw) */
+#cupidAnim .arrowFly{
+  position:absolute;
+  top: 50%;
+  left: 30%;
+  width: min(240px, 34vw);
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(90deg,
+    rgba(255,255,255,0),
+    rgba(255,255,255,.92),
+    rgba(255,59,122,.86)
+  );
+  transform: translateY(-50%) translateX(0) scaleX(0);
+  transform-origin: left center;
+  opacity: 0;
+  filter: drop-shadow(0 10px 18px rgba(255,59,122,.16));
+  will-change: transform, opacity;
+}
+#cupidAnim .arrowFly::after{
+  content:"";
+  position:absolute;
+  right:-10px;
+  top:50%;
+  transform: translateY(-50%);
+  width:0; height:0;
+  border-left: 12px solid rgba(255,59,122,.88);
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+}
+#cupidAnim.shoot .arrowFly{
+  opacity: 1;
+  animation: arrowToCenter 520ms cubic-bezier(.2,.9,.2,1) 520ms forwards;
+}
+
+@keyframes cupidRunX{
+  0%   { left:-360px; transform: translateY(-50%) scale(.96); }
+  70%  { left: 18%;   transform: translateY(-50%) scale(1.02); }
+  100% { left: 20%;   transform: translateY(-50%) scale(1); }
+}
+
+/* Move arrow tip to 50vw (center). Tweak -18px for tip offset */
+@keyframes arrowToCenter{
+  0%   { transform: translateY(-50%) translateX(0) scaleX(0); }
+  100% { transform: translateY(-50%) translateX(calc(50vw - 30% - 18px)) scaleX(2.2); }
+}
+
+@media (max-width: 520px){
+  #centerHeart{ width: min(190px, 52vw); }
+  #cupidAnim .cupidChar{ width: min(240px, 70vw); }
+  #cupidAnim .arrowFly{ left: 24%; width: min(210px, 56vw); }
+
+  @keyframes arrowToCenter{
+    0%   { transform: translateY(-50%) translateX(0) scaleX(0); }
+    100% { transform: translateY(-50%) translateX(calc(50vw - 24% - 16px)) scaleX(2.05); }
+  }
+}
+/* ===== FIX: put ALL FX on TOP overlay ===== */
+#hearts{ z-index: 9997 !important; }
+#sparkles{ z-index: 9998 !important; }
+.stage{ z-index: 10 !important; }
+
+/* ===== FIX: centerHeart should appear ONLY when triggered ===== */
+#centerHeart{
+  z-index: 9999 !important;
+  opacity: 0 !important;
+  transform: translate(-50%,-50%) scale(.86) !important;
+  transition: opacity .2s ease;
+}
+#centerHeart.on{
+  opacity: 1 !important;
+  animation: heartIn .55s cubic-bezier(.2,.9,.2,1) forwards;
+}
+@keyframes heartIn{
+  0%{ transform: translate(-50%,-50%) scale(.82); opacity: 0; }
+  100%{ transform: translate(-50%,-50%) scale(1); opacity: 1; }
+}
+
+/* ===== FIX: cupid + arrow on top, aligned to center (50%) ===== */
+#cupidAnim{ z-index: 10001 !important; }
+.shockwave{ z-index: 10000 !important; }
+
+/* Ensure cupid/arrow use the CENTER line */
+#cupidAnim .cupidChar{ top: 50% !important; }
+#cupidAnim .arrowFly{ top: 50% !important; }
+
+/* Arrow tip to screen center. Tweak -18px if needed */
+@keyframes arrowToCenter{
+  0%   { transform: translateY(-50%) translateX(0) scaleX(0); }
+  100% { transform: translateY(-50%) translateX(calc(50vw - 30% - 18px)) scaleX(2.2); }
+}
+.closeBtn{
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 12px;
+  background: rgba(0,0,0,.35);
+  color: #fff;
+  font-size: 28px;
+  line-height: 42px;
+  cursor: pointer;
+  z-index: 9999;
+  backdrop-filter: blur(6px);
+}
+.closeBtn:hover{ background: rgba(0,0,0,.5); }

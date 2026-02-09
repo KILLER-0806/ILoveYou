@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Chúc mừng Valentine</title>
+  <meta name="theme-color" content="#ff3b7a" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <canvas id="hearts"></canvas>
+  <canvas id="sparkles"></canvas>
+  <!-- Center target heart (always visible) -->
+<div id="centerHeart" aria-hidden="true"></div>
+
+  <!-- Center heart (always centered) -->
+  <div id="specialHeart" aria-hidden="true"></div>
+
+  <!-- Cupid run + shoot (PNG) -->
+  <div id="cupidAnim" aria-hidden="true">
+    <div class="cupidChar" aria-hidden="true"></div>
+    <div class="arrowFly" aria-hidden="true"></div>
+  </div>
+
+  <main class="stage">
+    <section class="intro" id="intro" aria-label="Valentine Intro">
+      <div class="tag" id="tag">Happy Valentine’s Day</div>
+
+      <h1 class="title">
+        <span class="grad" id="title">Chúc mừng Valentine</span>
+      </h1>
+
+      <p class="sub" id="sub">Cảm ơn quá khứ - hiện tại - tương lai có em</p>
+
+      <div class="actions">
+        <button class="btn" id="openBtn" type="button">Mở bất ngờ</button>
+        <button class="btn ghost" id="musicBtn" type="button" aria-pressed="true">Tắt nhạc</button>
+      </div>
+
+      <p class="muted" id="autoplayNote" hidden>
+        Chạm/click để mở bất ngờ. Hoặc nhấn Space.
+      </p>
+    </section>
+
+    <section class="reveal" id="reveal" aria-hidden="true">
+      <button id="closeBtn" class="closeBtn" aria-label="Đóng">×</button>
+      <div class="glass glass--pro" id="fxBox">
+        <div class="blob"></div>
+        <div class="shine"></div>
+        <div class="contentOverlay"></div>
+        <div class="boxFX" id="boxFX" aria-hidden="true"></div>
+
+        <div class="boxHead">
+          <div class="pill" id="tag2">Happy Valentine’s Day</div>
+        </div>
+
+        <h2 class="burst" id="burstText"></h2>
+        <p class="line" id="burstLine"></p>
+
+        <div class="boxActions">
+          <button class="btn" id="moreHeartsBtn" type="button">Thả tim</button>
+          <button class="btn ghost" id="replayBtn" type="button">Món quà nhỏ cho "Bà IU"</button>
+        </div>
+
+        <div class="boxFoot">
+          <span class="kbd">M</span> nhạc
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <audio id="bgm" loop preload="auto"></audio>
+  <script src="script.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+</body>
+</html>
