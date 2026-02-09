@@ -4,7 +4,7 @@ const CONFIG = {
   sub: "Quá khứ để nhìn lại -  Hiện tại để vun đắp - Tương lai để cố gắng",
   burstMessage: "Chúc 'Bà IU' một Valentine thật ngọt ngào",
   burstLine: "Mong hiện tại và tương lai hai ta sẽ luôn luôn thành công và có yêu thương ở bên!",
-  musicSrc: "assets/music.mp3",
+  musicSrc: "music.mp3",
 };
 
 const $ = (s) => document.querySelector(s);
@@ -521,4 +521,5 @@ closeBtn?.addEventListener("click", (e) => {
 addEventListener("keydown", (e) => {
   if (e.key === "Escape") closeExperience();
 });
+
 
